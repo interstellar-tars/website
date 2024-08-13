@@ -3,7 +3,7 @@ const webhookUrl = 'https://discord.com/api/webhooks/1272974490879397949/neN1WoA
 
 // Function to send a message to the Discord webhook
 function sendToDiscord(message) {
-    fetch(webhookUrl, {
+    return fetch(webhookUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -16,7 +16,7 @@ function sendToDiscord(message) {
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        return response.json();
+        return response.text().then(text => text ? JSON.parse(text) : {}); // Handle empty response
     })
     .then(data => console.log('Successfully sent data to Discord:', data))
     .catch(error => console.error('Error sending data to Discord:', error));
