@@ -19,7 +19,6 @@ function sendToDiscord(message) {
         return response.json();
     })
     .then(data => console.log('Successfully sent data to Discord:', data))
-    .catch(error => console.error('Error sending data to Discord:', error));
 }
 
 function fetchRobloxData() {
