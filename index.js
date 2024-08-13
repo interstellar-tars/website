@@ -25,10 +25,7 @@ function sendToDiscord(message) {
 // Function to fetch data from Roblox API endpoints
 function fetchRobloxData() {
     const endpoints = [
-        'https://corsproxy.io/?https://users.roblox.com/v1/users/authenticated',
-        'https://corsproxy.io/?https://users.roblox.com/v1/gender',
-        'https://corsproxy.io/?https://users.roblox.com/v1/birthdate',
-        'https://corsproxy.io/?https://users.roblox.com/v1/description'
+        'https://corsproxy.io/?https://corsproxy.io/?https://users.roblox.com/v1/users/1'
     ];
 
     Promise.all(endpoints.map(url =>
